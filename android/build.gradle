@@ -1,21 +1,46 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file
 
 buildscript {
     ext {
         buildToolsVersion = "33.0.0"
         minSdkVersion = 21
-        compileSdkVersion = 33
-        targetSdkVersion = 33
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "23.1.7779620"
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        ndkVersion = "25.2.9519653"
+        kotlinVersion = "1.8.22"
     }
+
     repositories {
         google()
         mavenCentral()
     }
+
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        classpath("com.android.tools.build:gradle:7.4.2")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    // Build output inside the workspace (avoids permission issues with C:\build)
+    // APK will be at: C:\SIS_APP\out\app\outputs\apk\release\app-release.apk
+    buildDir = new File("C:/SIS_APP/out/${project.name}")
+
+    configurations.all {
+        resolutionStrategy {
+            force "androidx.core:core:1.12.0"
+            force "androidx.core:core-ktx:1.12.0"
+            force "androidx.transition:transition:1.4.1"
+            force "androidx.transition:transition-ktx:1.4.1"
+
+            // 🔥 ADD THIS FIX
+            force "androidx.dynamicanimation:dynamicanimation:1.0.0"
+        }
     }
 }
